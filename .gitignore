@@ -1,0 +1,13 @@
+# Dépendances et fichiers de travail
+node_modules/
+temporary screenshots/
+Rendu final/
+.DS_Store
+
+# Fichiers sources lourds (les versions web sont dans assets/)
+BasmaSellak,Titouan.mp4
+Pub Nike KD16.mp4
+Affiche Adapt'Action.pdf
+
+# Instructions de travail
+Claude.md

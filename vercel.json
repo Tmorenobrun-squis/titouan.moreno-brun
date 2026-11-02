@@ -1,0 +1,5 @@
+{
+  "installCommand": "echo \"Site statique : aucune installation\"",
+  "buildCommand": "",
+  "outputDirectory": "."
+}
