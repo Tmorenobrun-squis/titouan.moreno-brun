@@ -814,6 +814,8 @@
 
     /* ---------- Transition à volets (inspirée de michael-aust.com) ---------- */
     .shutter-sec { position: relative; height: 260vh; background: var(--paper); }
+    /* sur téléphone, transition plus courte : moins d'écran vide à faire défiler */
+    @media (max-width: 640px) { .shutter-sec { height: 170vh; } }
     .shutter-stage {
       position: sticky; top: 0;
       height: 100vh; height: 100svh;
@@ -978,7 +980,12 @@
     .altimeter { contain: layout paint; }
     .altimeter-label { opacity: 0.65; }
     .altimeter.is-summit { background: var(--accent); }
-    @media (max-width: 480px) { .altimeter-label { display: none; } }
+    @media (max-width: 480px) {
+      .altimeter-label { display: none; }
+      .altimeter { left: var(--s-3); bottom: var(--s-3); padding: 4px 10px; font-size: 0.625rem; }
+      /* le pied de page laisse la place à l'altimètre */
+      footer { padding-bottom: 3.5rem; }
+    }
     .is-capture .altimeter { display: none; }
 
     /* Animations continues mises en pause quand la zone n'est pas visible */
