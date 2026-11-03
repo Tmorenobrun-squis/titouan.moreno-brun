@@ -2128,9 +2128,9 @@
     });
 
     /* ---------- Formulaire ---------- */
-    // Pour recevoir les messages sans quitter le site : créer un formulaire gratuit sur
-    // https://formspree.io et coller son URL ici (ex. "https://formspree.io/f/abcdwxyz").
-    const FORM_ENDPOINT = '';
+    // Envoi direct dans la boîte mail via FormSubmit (gratuit, sans compte).
+    // Le premier envoi déclenche un e-mail d'activation à valider une seule fois.
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/tmorenobrun@gmail.com';
 
     const form = $('contact-form');
     const statusEl = $('form-status');
@@ -2182,14 +2182,6 @@
 
       const data = Object.fromEntries(new FormData(form));
 
-      if (!FORM_ENDPOINT) {
-        // Pas encore de service d'envoi branché : on ouvre la messagerie, pré-remplie.
-        const body = `${data.message}\n\n— ${data.name} (${data.email})`;
-        window.location.href = `mailto:tmorenobrun@gmail.com?subject=${encodeURIComponent('Contact portfolio — ' + data.name)}&body=${encodeURIComponent(body)}`;
-        setStatus('Votre messagerie s\'ouvre avec le message pré-rempli.', 'info');
-        return;
-      }
-
       submitBtn.disabled = true;
       label.textContent = 'Envoi…';
       loading.classList.remove('hidden');
@@ -2198,9 +2190,17 @@
         const res = await fetch(FORM_ENDPOINT, {
           method: 'POST',
           headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: data.name, email: data.email, message: data.message }),
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            message: data.message,
+            _subject: 'Portfolio : nouveau message de ' + data.name,
+            _template: 'table',
+            _captcha: 'false',
+          }),
         });
-        if (!res.ok) throw new Error(res.status);
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || String(json.success) !== 'true') throw new Error(json.message || res.status);
         form.reset();
         setStatus('Message envoyé. Je vous réponds vite.', 'ok');
       } catch {
